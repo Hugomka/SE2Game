@@ -22,7 +22,6 @@ namespace StudentAdministration
             String s = "Supermooie nuttige string ofzo";
             String test = "Hallo dit is een test";
             test += ".";
-            test += "...";
         }
     }
 }
