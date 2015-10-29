@@ -20,6 +20,8 @@ namespace StudentAdministration
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new StudentForm());
             String s = "Supermooie nuttige string ofzo";
+            String test = "Hallo dit is een test";
+            test += ".";
         }
     }
 }
