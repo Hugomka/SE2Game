@@ -1,82 +1,51 @@
-# Studentenadministratie
-Voor deze oefening werk je verder op een bestaand project. Gegeven is een
-applicatie die gebruikt kan worden om studenten in op te slaan. Dit project is
-zo opgezet dat er een duidelijke scheiding te vinden is tussen de verschillende
-lagen van de applicatie. Ook al is het nog een klein project, de voordelen van
-deze opzet zijn toch al duidelijk. Zo kunnen we bijvoorbeeld onze applicatie
-goed voorzien van unit tests en hebben we een duidelijke plek voor onze domein
-en business logica.
+# SE2 Game
 
-De opzet die gebruikt is noemen we het *repository pattern*. De gedachte
-hierachter is dat de view-laag (je Form) met een repository klasse communiceert
-als er gegevens opgehaald of opgeslagen moeten worden. Dit is de logica-laag.
-Deze gebruikt vervolgens een context om de feitelijke persistentie te laten
-regelen: de data-laag. Doordat de data-laag vastgelegd staat in een interface,
-kunnen we eenvoudig meerdere vormen van opslag aanbieden: een SQLite
-implementatie kan bestaan naast een file based persistentie; voor onze unit
-tests gebruiken we een in-memory opslag.
+Deze week worden pickups toegevoegd aan de game, evenals het opslaan en laden
+van de maps. In de uitwerking op GitLab zit dit al voor een deel gewerkt, maar
+het is natuurlijk ook prima om dit op je eigen manier aan je eigen
+implementatie toe te voegen.
 
-De applicatie is echter nog niet helemaal af. Er is al een begin gemaakt met de
-functionaliteit die het toekennen van cijfers aan studenten mogelijk moet
-maken, maar het is aan jou om dit in lijn met de gegeven code uiteindelijk te
-realiseren. De docent wil namelijk de resultaten voor de individuele opdracht
-van SE2 met deze tool gaan administreren.
+## De opdracht voor deze week
 
-Tip: mocht je tijdens het doorlopen van deze oefening het spoor bijster raken,
-kijk dan naar de bestaande implementatie van de `Student*` klassen. Deze is
-vergelijkbaar met wat benodigd is voor de `Grade*` klassen.
-
-## De Grade klasse
-Als eerste moet de `Grade` klasse geïmplementeerd worden. Deze is nu nog leeg:
-zorg ervoor dat onderstaande punten beschikbaar zijn:
-
- 1. De klasse krijgt 3 properties: `Analysis`, `Design` en `Code`. Alle
-    properties zijn van het type `decimal` en readonly.
- 1. Indien de constructor die de attributen van de klasse instelt een ongeldige
-    invoer krijgt (een van de cijfers is kleiner dan 0 of groter dan 10), dan
-    gooit deze een `InvalidGradeException` op. Implementeer deze nieuwe
-    exception en de gevraagde logica.
- 1. Er is al een bestand beschikbaar gemaakt om de `Grade` klasse te testen.
-    Implementeer in het `GradeTest.cs` bestand een eerste unittest die de
-    aangemaakte constructor *volledig* test.
-
-## De repositories implementeren
-Nu we een model gemaakt hebben om onze gegevens in op te slaan, zorgen we
-ervoor dat deze met de database kan werken. Maak een nieuw bestand aan genaamd
-`GradeSQLiteContext`. We gaan dit bestand vullen op dezelfde manier zoals het
-`StudentSQLiteContext` bestand.
-
- 1. Maak een methode `GetForStudent` aan, en implementeer deze. Zorg dat deze
-    functie overeenkomt met de in de `IGradeContext` interface gevonden
-    functie, zodat de `GradeRepository` hiermee kan werkt. *Merk op dat de
-    klasse zelf dus niet deze interface dient te implementeren.* Zie het
-    `Database.cs` bestand voor informatie over de opzet van de `Grade` tabel.
- 1. Doe hetzelfde voor de `Insert` methode: voeg ook deze to aan de
-    `GradeSQLiteContext` klasse.
- 1. Maak in het formulier een nieuwe `GradeRepository` aan, vergelijkbaar met
-    hoe de `StudentRepository` gemaakt wordt. Als alles goed is geïmplementeerd
-    zou dit moeten compileren zonder fouten.
- 1. Werk nu ook je unit tests bij. Hiervoor is al een in-memory context
-    beschikbaar, maar de tests ontbreken nog. Realiseer een unit test die het
-    toevoegen en ophalen van grades *volledig* test.
-
-## Business logica en afronding
-Als laatste stap voegen we nog wat business logica toe. Eerder hebben we al
-gezorgd dat de `Grade` klasse geen ongeldige cijfers kan bevatten. Voor de
-individuele opdracht van SE2 zit er echter een weging tussen de cijfers, alsook
-een voorwaarde voor het bepalen van het eindcijfer. Deze business logica moet
-terecht komen in onze logica-laag; in de repository dus.
-
- 1. De eerste voorwaarde is dat alle deelcijfers voldoende dienen te zijn. Voeg
-    hiervoor een methode en implementatie toe aan de `GradeRepository` klasse
-    welke, gegeven een `Grade` instantie, bepaald of hieraan voldaan is.
- 1. Ook het berekenen van het gemiddelde dient in de genoemde klasse terecht te
-    komen. Gegeven een `Grade` instantie bepaald deze functie het gemiddelde
-    van de drie deelcijfer, waarbij de analyse voor 20%, het ontwerp voor 30%
-    en de code voor 50% het eindcijfer bepaald. Dit cijfer moet afgerond worden
-    naar een geheel getal. Is een van de deelcijfers onvoldoende, dan wordt het
-    gemiddelde gelijk aan de laagste onvoldoende.
- 1. Implementeer twee nieuwe unit tests die deze functies *volledig* testen.
- 1. Tot slot: zorg ervoor dat de GUI werkt. Als het goed is, en je unit tests
-    correct zijn opgezet, is dit slechts een formaliteit.
+ 1. Om duidelijk te krijgen hoe items werken in het spel, mogen er nog twee
+    toegevoegd worden. Voor nu is alleen een sleutel benodigd, maar we willen
+    ook een item hebben wat de player beïnvloed. Maak hiervoor een nieuwe
+    `Item` aan wat een soort helm is: als de player deze helm in zijn bezit
+    heeft, ontvangt hij maar de helft van de damage die normaal ontvangen
+    wordt. Merk op dat er al afbeeldingen in de Sprites map staan voor de
+    nieuwe items; ook kun je zelf een nieuwe sprite op internet zoeken.
+ 1. Ook willen we een soort laarzen als item: zijn deze opgepakt, dan
+    zal de player 50% sneller kunnen lopen.
+ 1. Beide items zijn verplicht om te hebben voordat het spel gewonnen kan
+    worden. Pas hiervoor de code aan zodat dit naar behoren werkt.
+ 1. De applicatie genereert nu bij het opstarten een willekeurige map. Het
+    makkelijkste begin maken we door eerst deze map op te slaan bij het
+    opstarten van de applicatie. Zorg ervoor dat dit gebeurd door aan het einde
+    van de constructor van de `Map` klasse, de gegenereerde map op te slaan.
+    Sla voor nu de gegevens op in een tekstbestand met als naam
+    "latest_generated_map.txt", zodanig dat je later dit bestand kunt aanpassen
+    met een teksteditor.
+ 1. Probeer nu het opgeslagen bestand weer in te lezen bij het opstarten van de
+    applicatie. Om dit te testen laad je het bestand in, wederom in de
+    constructor van de `Map` klasse. Als het alles correct geïmplementeerd is
+    zou je bij het opstarten iedere keer dezelfde map moeten zien. Door nu zelf
+    het opgeslagen bestand te bewerken zou je zelf een level moeten kunnen
+    inrichten.
+ 1. Het kan natuurlijk gebeuren dat bij het bewerken van een level een fout
+    gemaakt wordt. We willen hier op een subtiele manier mee om gaan, dus
+    zullen we de foutafhandeling realiseren met exceptions. Maak zelf een
+    nieuwe `InvalidMapException` klasse aan, en zorg dat deze opgegooid wordt
+    als er een probleem is bij het inladen van een level. In het formulier
+    "catch" je deze exception vervolgens en toon je een melding aan de
+    gebruiker.
+ 1. Nu we levels kunnen maken, is het ook wel makkelijk om levels te kunnen
+    kiezen voordat we het spel beginnen. Voeg hiervoor controls toe op het
+    formulier, en gebruik de `OpenFileDialog` klasse om de gebruiker een
+    bestand te laten kiezen wat als level gebruikt moet worden.
+ 1. Heb je dit alles af? Prima! Lever de opdracht in op Canvas. Mocht je nog
+    behoefte hebben aan een verdere uitdaging, probeer dan eens of je het spel
+    kunt opslaan als het formulier wordt afgesloten door een aantal klassen te
+    voorzien van het `DataContract` attribuut. Ook kun je mogelijk nog wat
+    nieuwe pickups verzinnen zoals bijvoorbeeld een deur die zorgt dat de
+    speler naar een willekeurige andere deur teleporteert.
 
